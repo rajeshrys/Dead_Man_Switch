@@ -12,7 +12,9 @@ const useAuth =()=>{
         setloading(true)
         try {
             const response = await register(userdata)
-            
+            if (response.user) {
+                setuser(response.user)
+            }
             return response
         } catch (error) {
             console.log(error)
@@ -31,6 +33,9 @@ const useAuth =()=>{
         setloading(true)
         try {
             const response = await login(userdata)
+            if (response.user) {
+                setuser(response.user)
+            }
             return response
         } catch (error) {
             console.log(error)
@@ -49,7 +54,7 @@ const useAuth =()=>{
         setloading(true)
         try {
             const response = await logout()
-            
+            setuser(null)
             return response
         } catch (error) {
             throw error

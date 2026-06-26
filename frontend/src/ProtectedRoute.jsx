@@ -1,13 +1,18 @@
 import { Navigate } from "react-router-dom";
-import { useEffect } from "react";
-
-import React from 'react'
+import { useContext } from "react";
+import { AuthContext } from "./context/authcontext";
 
 const ProtectedRoute = ({children}) => {
-  const token = sessionStorage.getItem('token')
-  if(!token){
+  const { user, authChecked } = useContext(AuthContext)
+
+  if (!authChecked) {
+    return <div className="flex items-center justify-center min-h-screen"><p className="text-gray-500 text-lg">Loading...</p></div>
+  }
+
+  if (!user) {
     return <Navigate to='/login' replace />
   }
+
   return children
 }
 

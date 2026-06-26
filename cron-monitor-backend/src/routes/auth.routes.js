@@ -9,5 +9,6 @@ router.post('/login',authcontroller.logincontroller);
 
 router.post('/logout',authcontroller.logout)
 
+router.get('/me',authcontroller.getme)
 
 module.exports = router

@@ -1,12 +1,29 @@
-import React, { useContext } from 'react'
+import React, { useContext,useEffect } from 'react'
 import Navbar from './Navbar'
 import { motion } from 'motion/react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../context/authcontext'
+import {checkAuth} from '../../services/authservice'
 
 const Hompage = () => {
-  const { setactivetab } = useContext(AuthContext)
+  const { setactivetab,setdashboard } = useContext(AuthContext)
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+try {
+      checkAuth().then(result => {
+          if(result){
+            navigate("/dashboard");
+            setdashboard(true)
+        }
 
+    });
+} catch (error) {
+  console.log(error.message)
+}
+
+}, [])
+  
   return (
     <div className='min-h-screen w-full bg-white'>
       <Navbar />
