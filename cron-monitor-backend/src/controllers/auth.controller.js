@@ -27,11 +27,17 @@ async function registercontroller(req,res){
             password:hashedpass
         })
 
-        const token = jwt.sign({email},process.env.JWT_SECRET,{expiresIn: '7d'})
-        res.cookie('token',token)
+        const token = jwt.sign({_id: user.id},process.env.JWT_SECRET,{expiresIn: '7d'})
+        res.cookie('token',token,{
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
         res.status(200).json({
             message: "User registration Successful",
             user:{
+                id: user.id,
                 username,
                 email
             }
@@ -66,11 +72,20 @@ async function logincontroller(req,res){
             })
         }
         const token = jwt.sign({_id: user.id},process.env.JWT_SECRET,{expiresIn:'7d'})
-        res.cookie("token",token)
+        res.cookie("token",token,{
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
 
         res.status(200).json({
             message: "User Login Successful",
-            token
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email
+            }
         })
     } catch (error) {
         return res.status(500).json({
@@ -96,12 +111,35 @@ async function logout(req,res){
 }
 
 async function getme(req,res){
-    const user  = await usermodel.findById(req.user._id)
-    res.status(200).json({
-        user,
-        message:"user fetched successfully"
-    })
+    const token = req.cookies.token;
+    if(!token){
+        return res.status(401).json({
+            authenticated: false
+        })
+    }
+    try {
+        const decoded = jwt.verify(token,process.env.JWT_SECRET)
+        const user = await usermodel.findById(decoded._id)
+        if(!user){
+            return res.status(401).json({
+                authenticated: false
+            })
+        }
+        return res.json({
+            authenticated: true,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email
+            }
+        })
+    } catch (error) {
+        return res.status(401).json({
+            authenticated: false
+        })
+    }
 
 }
 
-module.exports = {registercontroller,logincontroller,logout}
+
+module.exports = {registercontroller,logincontroller,logout,getme}

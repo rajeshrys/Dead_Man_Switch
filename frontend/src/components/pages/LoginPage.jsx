@@ -10,9 +10,8 @@ const LoginPage = () => {
   const [messages, setmessages] = useState('')
   const [error, seterror] = useState('')
   const [mess, setmess] = useState(false)
-  const {email,setemail} = useContext(AuthContext)
+  const {setuser} = useContext(AuthContext)
   const [task,settask] = useState({
-  username: "",
   email: "",
   password: ""
 })
@@ -31,12 +30,12 @@ const navigate = useNavigate()
     try {
       const response = await handlelogin(task)
     if (response.message === 'User Login Successful') {
-      sessionStorage.setItem("token",response.token)
+      if (response.user) {
+        setuser(response.user)
+      }
       setmess(true)
       setmessages(response.message);
       setTimeout(() => {
-       const logo = task.email.slice(0,1)
-  sessionStorage.setItem("logo", logo)
     navigate('/dashboard',{replace: true});
     }, 1000);
 
