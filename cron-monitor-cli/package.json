@@ -1,0 +1,27 @@
+{
+  "name": "cron-monitor",
+  "version": "1.0.0",
+  "description": "CLI for monitoring backend cron jobs.",
+  "main": "bin/cron-monitor.js",
+  "bin": {
+    "cron-monitor": "bin/cron-monitor.js"
+  },
+  "scripts": {
+    "start": "node bin/cron-monitor.js",
+    "test": "echo \"No tests specified\""
+  },
+  "keywords": [
+    "cron",
+    "monitor",
+    "scheduler",
+    "backend",
+    "jobs",
+    "cli",
+    "nodejs"
+  ],
+  "author": "Rajesh",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

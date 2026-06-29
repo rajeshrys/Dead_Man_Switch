@@ -4,7 +4,7 @@ exports.handleping = async(req,res)=>{
     try {
         const {monitorId} = req.params
         const now = new Date()
-        const monitor = await monitormodel.findById({_id:monitorId})
+        const monitor = await monitormodel.findById(monitorId);
         console.log("monitor:",monitor)
         if(!monitor){
     return res.status(404).json({

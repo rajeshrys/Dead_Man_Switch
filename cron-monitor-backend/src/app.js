@@ -4,6 +4,8 @@ const cookieparser = require("cookie-parser")
 const pingRoutes = require("./routes/ping.routes")
 const authRoutes = require("./routes/auth.routes")
 const cors = require('cors')
+const apiRoutes = require("./routes/apikey.routes");
+const cliRoutes = require("./routes/cli.routes");
 
 app.use(express.json())
 app.use(cookieparser())
@@ -11,7 +13,9 @@ app.use(cors({
     origin: "https://dead-man-switch-zeta.vercel.app",
     credentials: true
 }),)
-app.use('/api/v1/auth',authRoutes)
-app.use('/api/v1/monitor',pingRoutes)
+app.use('/api/v1/auth',authRoutes);
+app.use('/api/v1/api',apiRoutes);
+app.use('/api/v1/cli',cliRoutes);
+app.use('/api/v1/monitor',pingRoutes);
 
 module.exports  = app;
