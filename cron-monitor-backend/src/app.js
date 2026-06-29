@@ -8,7 +8,7 @@ const cors = require('cors')
 app.use(express.json())
 app.use(cookieparser())
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://dead-man-switch-zeta.vercel.app",
     credentials: true
 }),)
 app.use('/api/v1/auth',authRoutes)
